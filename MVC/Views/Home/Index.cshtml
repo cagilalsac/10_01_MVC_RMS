@@ -1,0 +1,43 @@
+﻿@*
+    In Razor, C# codes can be written with HTML codes in the views.
+*@
+
+@* This is a Razor comment. *@
+
+@* Way 1: *@
+@* @using BLL.Models *@
+@* Way 2: *@
+@* Model class namespace (BLL.Models) should be added to "~/Views/_ViewImports.cshtml", therefore we can reach all model classes of the namespace within all views *@
+
+@{
+    ViewData["Title"] = "Home Page"; // ViewData is used for carrying data other than model data between views and from actions to the views,
+                                     // value set here will be written in the title tag of "~/Views/Shared/_Layout.cshtml"
+
+    // in Razor, C# code can be written here lines ending with ";", variables set here can be used below
+
+    // string title = "RMS";
+    // instead of setting the title as a string here, we get it from the appsettings.json file's AppSettings section which is bound to the AppSettings instance in Program.cs
+    string title = AppSettings.Title;
+
+    var description = AppSettings.Description; // var can be used for declaring variables which will automatically have the type of the value assigned, here string
+}
+
+<div class="text-center">
+    @*
+    application user's authentication cookie can be checked by the User object's Identity property reference's IsAuthenticated boolean property
+    *@
+    @if (!User.Identity.IsAuthenticated) @* Razor code blocks can also be written starting with "@if", "@for", "@foreach" etc. *@
+    {
+        <h1 class="display-4">Welcome to @title</h1> @* in Razor, variables set above can be used with "@" for displaying their values, 
+                                                     ";" shouldn't be written otherwise it will be displayed in the page *@
+    }
+    else
+    {
+    @*
+    application user's user name in the authentication cookie can be used by User object's Identity property reference's Name string property
+    *@
+        <h1 class="display-4">Welcome to @title <b>@User.Identity.Name</b></h1>
+    }
+
+    <h3>@description</h3> @* the string value set above will be written in the h3 tag *@
+</div>

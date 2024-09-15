@@ -1,0 +1,96 @@
+﻿@model RoleModel
+
+@* Generated from Custom Template. *@
+@* Model namespace using directive should be added to _ViewImports.cshtml. *@
+
+@{
+    var containerDivClass = "container";
+    var dateTimePickerClass = "datetimepicker"; // for the usage of calendar with a text HTML input for the model's DateTime properties 
+}
+@{
+    ViewData["Title"] = "Role Create";
+}
+
+<div class="@containerDivClass">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+</div>
+
+<div class="@containerDivClass">
+    @if (TempData["Message"] is not null)
+    {
+    <p class="text-danger">
+        @TempData["Message"]
+    </p>
+    }
+    <form asp-action="Create" autocomplete="off">
+
+        @* 
+        Controlled by ValidateAntiForgeryToken attribute of the Create post action in the controller and ensures that request data is sent from only this view's form. 
+        *@
+        @Html.AntiForgeryToken() 
+
+        @* 
+           HTML Helper: Renders the ModelState's error messages if validation fails.
+        First parameter is for excluding property errors, which is sent true to only show the service result message.
+        Second parameter is message, which can be optionally sent to write a specific message other than the service result message carried by the ModelState.
+        Last parameter is the HTML attributes, which can be specified as anonymous types.
+        "@" is used before "class" to escape it since "@" is reserved in Razor Syntax.
+        *@
+        @* @Html.ValidationSummary(true, null, new { @class = "text-danger" }) *@
+        @*
+           Tag Helper: "ModelOnly" excludes, "All" includes property errors.
+        *@
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div> @* ModelState in the action sends data to the view's validation summary *@
+
+        <div class="row mb-3">
+            @* HTML: *@
+            @* <label class="col-2 col-form-label fw-bold">Role Name</label> *@
+            @* HTML Helper: renders a label tag with the DisplayName attribute value of the model delegate's Name property (Role Name) with the specified CSS class *@
+            @* @Html.LabelFor(model => model.Name, new { @class = "col-2 col-form-label fw-bold" }) *@
+            @* Tag Helper: renders a label tag with the DisplayName attribute value of the model delegate's Name property (Role Name) with the specified CSS class *@
+            <label asp-for="Name" class="col-2 col-form-label fw-bold"></label>
+
+			<div class="col-10">
+                @* HTML: placeholder HTML attribute may also be added as shown below *@
+                @* <input name="Record.Name" type="text" class="form-control" placeholder="Enter name..." /> *@
+                @* HTML Helper: renders an input tag for the model delegate's Record.Name property with the specified CSS class and the placeholder HTML attribute *@
+                @* @Html.TextBoxFor(model => model.Record.Name, new { @class = "form-control", placeholder = "Enter name..." }) *@
+                @* Tag Helper: renders an input tag for the model delegate's Record.Name property with the specified CSS class and the placeholder HTML attribute *@
+                <input asp-for="Record.Name" class="form-control" placeholder="Enter name..." />
+
+                @* 
+                   HTML Helper: Renders the data annotation message of the model's property (Record.Name) if validation fails.
+                First parameter is the expression of the model delegate.
+                Second parameter is message, which can be optionally sent to write a specific message other than the property's data annotation message.
+                Last parameter is the HTML attributes.
+                *@
+                @* @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" }) *@
+                @* Tag Helper: *@
+				<span asp-validation-for="Record.Name" class="text-danger"></span>
+			</div>
+        </div>
+
+@* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. *@
+        @*
+        <div class="row mb-3">
+            <label asp-for="ManyToManyRecordIds" class="col-2 col-form-label fw-bold"></label>
+	        <div class="col-10">
+		        <select multiple asp-for="ManyToManyRecordIds" class="form-select" asp-items="ViewBag.ManyToManyRecordIds"></select>
+		        <span asp-validation-for="ManyToManyRecordIds" class="text-danger"></span>
+	        </div>
+        </div>
+        *@
+
+        <hr />  
+        <div class="row mb-3">
+			<div class="offset-2 col-10">
+                <button type="submit" class="btn btn-primary">Save</button>@* button to submit the form data to the specified controller's action of the form tag *@
+				&nbsp;&nbsp;
+                <button type="reset" class="btn btn-outline-primary">Reset</button>@* button to set form data to the data when the page is first returned *@
+				&nbsp;&nbsp;
+				<a asp-action="Index">Back to List</a>@* link for redirecting to the Role List *@
+			</div>
+        </div>
+    </form>
+</div>  

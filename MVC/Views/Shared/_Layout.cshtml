@@ -1,0 +1,120 @@
+﻿@* Custom layouts can be created and the project's layout can be changed under ~/Views/_ViewStart.cshtml *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @AppSettings.Title</title> @* titles set in the views will be written here by ViewData["Title"] *@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MVC.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">@* container-fluid: Bootstrap CSS class for full width *@
+
+                @*
+                we want to write "RMS" in the title of the HTML document:
+                we can reach the AppSettings class properties directly and use their values
+                *@
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@AppSettings.Title</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        @if (User.Identity.IsAuthenticated) // show link to only logged in users with authentication cookie
+                        {
+                            @* session example: *@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Favorites" asp-action="Index">Favorites</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>
+                        }
+
+                        @*
+                        application user's role name can be checked by the User object's IsInRole method,
+                        this method also checks whether the application user is authenticated or not,
+                        display "Roles" link for only application users with role "Admin"
+                        *@
+                        @* @if (User.IsInRole("Admin"))
+                        { *@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                            </li>
+                        @* } *@
+
+                        @* show link to everyone *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Resources" asp-action="Index">Resources</a>
+                        </li>
+
+                    </ul>
+
+                    @* displaying the links about account on the right *@
+                    <div class="navbar-text">
+                        <ul class="navbar-nav me-auto">
+
+                            @*
+                            application user's authentication cookie can be checked by the User object's Identity property reference's
+                            IsAuthenticated boolean property,
+                            application user's user name in the authentication cookie can be used by User object's Identity property
+                            reference's Name string property
+                            *@
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item pt-2">@* pt-2 Bootstrap class: padding top 2 units *@
+                                    <span class="badge bg-info text-black">@User.Identity.Name</span>@* displaying the user name *@
+                                </li>
+
+                                @* writing escaped text in Razor C# code: *@
+                                @* Way 1: *@
+                                @* <text>&nbsp;&nbsp;</text> *@
+                                @* Way 2: *@
+                                @:&nbsp;&nbsp;
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody() @* views that we create are rendered here *@
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container-fluid">
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false) @* Renders the Scripts sections of the views if written. 
+                                                          If required is set to true, then all views must have Scripts sections. *@
+</body>
+</html>
