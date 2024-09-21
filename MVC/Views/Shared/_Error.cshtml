@@ -1,0 +1,24 @@
+﻿@* other types such as string can also be used as a view's model type *@
+@model string
+
+@{
+    ViewData["Title"] = "Error!";
+}
+
+<div class="text-center">
+
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+
+    @* IsNullOrWhiteSpace method of the string type checks the parameter's value for null or "" (empty string) by trimming white space characters *@
+    @if (string.IsNullOrWhiteSpace(Model))
+    {
+        @* writing a general message *@
+        <h2 class="text-danger">An error occurred while processing your request!</h2>
+    }
+    else
+    {
+        @* writing model's value of type string *@
+        <h2 class="text-danger">@Model</h2>
+    }
+
+</div>

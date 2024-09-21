@@ -15,13 +15,18 @@ namespace BLL.DAL
         // will have table column of type nvarchar(MAX), MAX: 4000 unicode characters
         public string Content { get; set; } // can be null
 
-        // decimal number data types:
         // Way 1:
-        // public float Score { get; set; } // example value assignment: = 1.2f or 1.2F
+        //[Range(0, 5, ErrorMessage = "{0} must be between {1} and {2}!")] // Output: "Score must be between 0 and 5!",
+                                                                           // {0} placeholder uses the property's display name if exists, otherwise property name
         // Way 2:
-        // public double Score { get; set; } // example value assignment: = 1.2;
+        //[Range(0, 5, ErrorMessage = "This field must be between {1} and {2}!")] // Output: "This field must be between 0 and 5!"
         // Way 3:
-        public decimal Score { get; set; } // example value assignment: = 1.2m or 1.2M, can't be null
+        [Range(0, 5)]
+        public decimal Score { get; set; } // can't be null,
+                                           // decimal number data types: float, double and decimal,
+                                           // example value assignment for decimal: = 1.2m or 1.2M, 
+                                           // example value assignment for float: = 1.2f or 1.2F, 
+                                           // example value assignment for double: = 1.2
 
         // Way 1:
         //public Nullable<DateTime> Date { get; set; }

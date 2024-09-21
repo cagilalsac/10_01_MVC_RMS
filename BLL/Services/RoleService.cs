@@ -52,8 +52,11 @@ namespace BLL.Services
         // Method implementations of the method definitions in the interface:
         public IQueryable<RoleModel> Query() // Query method will be used for generating SQL queries without executing them.
         {
-            // LINQ (Language Integrated Query) Select method maps the properties of RoleModel from the properties of r (Role) delegate,
-            // this is called projection.
+            // LINQ (Language Integrated Query) Select method maps the properties of RoleModel from the properties of r (Role) delegate
+            // which is called Func in C# that returns a result of the specified type of the method.
+            // The r delegates used in the return statement methods below are all Func delegates.
+            // The other delegate type in C# is Action which doesn't return anything (void) and is generally used for configuration operations.
+            // Mapping entity properties to model properties is called projection.
             // Way 1:
             //return _db.Roles.Select(r => new RoleModel() { Record = r }); // "r =>" is called Lambda Expression
             // Way 2: LINQ OrderBy method orders the records by the r (Role) delegate property (r.Name: Role Name),
@@ -109,7 +112,7 @@ namespace BLL.Services
 
         public Service Update(Role role)
         {
-            // Checking if a record name other than the role paramater's name exists in the Roles table: we perform this check by adding the Id condition
+            // Checking if a record with the name other than the role paramater's name exists in the Roles table: we perform this check by adding the Id condition
             if (_db.Roles.Any(r => r.Id != role.Id && r.Name == role.Name.Trim()))
                 return Error("Role with the same name exists!");
 
@@ -129,7 +132,7 @@ namespace BLL.Services
 
             _db.SaveChanges(); // we invoke this method for committing all DbSet changes to the database with one operation, this is called Unit of Work
 
-            return Success("Role updated successfully.");
+            return Success("Role updated successfully."); // will return a Service instance with the Message as the parameter and IsSuccessful true
         }
 
         public Service Delete(int id)
@@ -152,7 +155,7 @@ namespace BLL.Services
 
             _db.SaveChanges(); // we invoke this method for committing all DbSet changes to the database with one operation, this is called Unit of Work
 
-            return Success("Role deleted successfully.");
+            return Success("Role deleted successfully."); // will return a Service instance with the Message as the parameter and IsSuccessful true
         }
     }
 }

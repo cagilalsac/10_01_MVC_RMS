@@ -1,4 +1,4 @@
-﻿@model RoleModel
+﻿@model UserModel
 
 @* Generated from Custom Template. *@
 @* Model namespace using directive should be added to _ViewImports.cshtml. *@
@@ -7,7 +7,7 @@
     var containerDivClass = "container";
 }
 @{
-    ViewData["Title"] = "Role Delete";
+    ViewData["Title"] = "User Delete";
 }
 
 <div class="@containerDivClass">
@@ -26,24 +26,50 @@
     }
     <h3 class="text-danger">Are you sure you want to delete?</h3>
     <hr />
-    <div class="row mb-3">
-        <div class="col-2 fw-bold">
-            @Html.DisplayNameFor(model => model.Name)
-        </div>
-        <div class="col-10">
-            @Html.DisplayFor(model => model.Name)
-        </div>
-    </div>
 
-    @* Users: property for formatted or relational data in the model *@
-    <div class="row mb-3">
+    @* Way 1: displaying model properties in the view *@
+    @* <div class="row mb-3">
         <div class="col-2 fw-bold">
-            @Html.DisplayNameFor(model => model.Users)
+            @Html.DisplayNameFor(model => model.UserName)
         </div>
         <div class="col-10">
-            @Html.Raw(Model.Users)
+            @Html.DisplayFor(model => model.UserName)
         </div>
     </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Password)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Password)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.IsActive)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.IsActive)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Status)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Status)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Role)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Role)
+        </div>
+    </div> *@
+    @* Way 2: displaying model properties in a partial view, partial views are used for rounding up common parts of the views, created in Views/Users/_Details.cshtml *@
+    <partial name="_Details" model="Model" />
 
 @* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. *@
     @*
@@ -58,11 +84,6 @@
     *@
 
     <hr />
-
-    @*
-    The Record.Id value of the model will be sent to the Roles controller Delete post action when we click the Yes submit button so that
-    the role with the id in the Roles table can be deleted by the delete service method.
-    *@
     <form asp-action="Delete">
 	    @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Record.Id" />

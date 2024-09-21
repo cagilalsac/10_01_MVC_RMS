@@ -1,6 +1,7 @@
 using BLL.DAL;
 using BLL.Models;
 using BLL.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,27 +51,51 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
 // Way 3:
 builder.Services.AddScoped<IRoleService, RoleService>();
 
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IResourceService, ResourceService>();
+
+// Authentication:
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme) // we are adding authentication to the project using default Cookie authentication
+    .AddCookie(config => // we configure the cookie to be created through the config Action delegate
+    {
+        config.LoginPath = "/Users/Login"; // if an operation is attempted without logging into the system, redirect the user to the Users controller's Login action
+        config.AccessDeniedPath = "/Users/Login"; // if an unauthorized operation is attempted after logging into the system, redirect the user to the Users controller's Login action
+        config.ExpireTimeSpan = TimeSpan.FromMinutes(30); // allow the cookie created after logging into the system to be valid for 30 minutes, default value is 20 minutes,
+                                                          // TimeSpan type is used for duration management in C#
+        config.SlidingExpiration = true; // when set to true, the user's cookie expiration is extended by a specific duration every time they perform an action in the system,
+                                         // if set to false, the user's cookie lifespan ends after the duration specified above after the initial login, then user needs to log in again
+    });
+// If authentication is added here, it must be used below after building the application.
+
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment()) // for the Production Environment (two environments are generally used: Development and Production)
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Home/Error"); // don't show the exception details, redirect users to the Home/Error action so they see the Error view under Views/Shared folder
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseHttpsRedirection(); // for using https (Secured Hypertext Transfer Protocol)
+app.UseStaticFiles(); // for using files such as Javascript, CSS, HTML, etc. under wwwroot
 
-app.UseRouting();
+app.UseRouting(); // for enabling the MVC routing mechanism through controllers, actions and optionally action parameters
 
-app.UseAuthorization();
 
-app.MapControllerRoute(
+
+// Authentication:
+app.UseAuthentication(); // must be written to activate authentication configured above, authentication is asking "who are you?"
+
+
+
+app.UseAuthorization(); // for enabling users perform specific operations in the system according to their priviliges, authorization is asking "what can you do?"
+
+app.MapControllerRoute( // mapping the default route of the application which is controller/action/id, id is optional therefore marked with "?"
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+// Custom routes can also be added by using the MapControllerRoute method before default routing above. 
 
 app.Run();

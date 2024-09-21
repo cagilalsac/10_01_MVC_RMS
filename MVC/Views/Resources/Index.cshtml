@@ -1,0 +1,122 @@
+﻿@using System.Security.Claims @* extra using directives can be added in the views, here it is added for using the ClaimTypes class below *@
+
+@model IEnumerable<ResourceModel>
+
+@* Generated from Custom Template. *@
+@* Model namespace using directive should be added to _ViewImports.cshtml. *@
+
+@{
+    var containerDivClass = "container-fluid"; @* changed to "container-fluid" from "container" Bootstrap CSS class for displaying the page with full width *@
+}
+@{
+    ViewData["Title"] = "Resource List";
+}
+
+<div class="@containerDivClass">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+</div>
+
+@if (Model is not null)
+{
+    <form asp-action="Index" autocomplete="off">
+        <div class="@containerDivClass">
+            <div class="row">
+                <div class="col-12 text-danger">
+                    @TempData["Message"]
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-10 text-success">
+                    @Model.Count() record(s) found.
+                </div>
+                <div class="col-2 text-end">
+
+                    @if (User.Identity.IsAuthenticated) // show Create link to the authenticated application users
+                    {
+                        <a asp-action="Create">Create</a>
+                    }
+
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+
+                        @* we don't want to show the content in resource list, this part can be deleted *@
+                        @* <th>
+                            @Html.DisplayNameFor(model => model.Content)
+                        </th> *@
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Score)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Date)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserCount) @* property for formatted or relational data in the model *@
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+		            @foreach (var item in Model) {
+				        <tr>
+					        <td>
+						        @Html.DisplayFor(modelItem => item.Title)
+					        </td>
+
+                            @* we don't want to show the content in resource list, this part can be deleted *@
+					        @* <td>
+						        @Html.DisplayFor(modelItem => item.Content)
+					        </td> *@
+
+					        <td>
+						        @Html.DisplayFor(modelItem => item.Score)
+					        </td>
+					        <td>
+						        @Html.DisplayFor(modelItem => item.Date)
+					        </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserCount) @* property for formatted or relational data in the model *@
+                            </td>
+
+					        <td class="text-end w-25">
+
+                                @if (User.Identity.IsAuthenticated) // show Details link to the authenticated application users
+                                {
+						            <a asp-action="Details" asp-route-id="@item.Record.Id">Details</a>
+
+                                    @* 
+                                    for User role if application user Id is in the UserIds collection of the resource item, 
+                                    show Edit and Delete links since the resource item belongs to the user who created the resource,
+                                    for Admin role, show Edit and Delete links
+                                    *@
+
+                                    // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
+                                    var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+
+                                    if (User.IsInRole("Admin") || (User.IsInRole("User") && item.UserIds.Contains(userId)))
+                                    {
+                                        @:&nbsp;|&nbsp;
+                                        <a asp-action="Edit" asp-route-id="@item.Record.Id">Edit</a>
+                                        @:&nbsp;|&nbsp;
+                                        <a asp-action="Delete" asp-route-id="@item.Record.Id">Delete</a>
+                                    }
+                                }
+
+                            </td>
+				        </tr>
+		            }
+                </tbody>
+            </table>
+        </div>
+    </form>
+}

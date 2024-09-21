@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BLL.Controllers.Bases;
 using BLL.Services;
 using BLL.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // Generated from Custom Template.
 
 namespace MVC.Controllers
 {
+    [Authorize(Roles = "Admin")] // all of the actions can be executed for only logged in application users, who have an authentication cookie, with role name "Admin" 
     public class RolesController : MvcController // instead of inheriting from the Controller class, we inherit from the MvcController class to set the culture
     {
         // Service injections:
@@ -18,7 +20,7 @@ namespace MVC.Controllers
         //private readonly IManyToManyRecordService _ManyToManyRecordService;
 
         // Object of type RoleService which is implemented from the IRoleService interface is injected to this class through the constructor,
-        // therefore role CRUD and other operations can be performed with this service object in the actions.
+        // therefore role CRUD and other operations can be performed in the actions with _roleService field which references to the roleService injected instance.
         public RolesController(
 			IRoleService roleService
 
@@ -33,6 +35,7 @@ namespace MVC.Controllers
         }
 
         // GET: Roles
+        //[Authorize(Roles = "Admin")] // instead of using Authorize attribute above every action, it can be used above the controller and will execute for every action
         public IActionResult Index()
         {
             // Get collection service logic:
@@ -45,6 +48,7 @@ namespace MVC.Controllers
         }
 
         // GET: Roles/Details/5
+        //[Authorize(Roles = "Admin")] // instead of using Authorize attribute above every action, it can be used above the controller and will execute for every action
         public IActionResult Details(int id)
         {
             // Get item service logic:
@@ -67,6 +71,7 @@ namespace MVC.Controllers
 
         // GET: Roles/Create
         //[HttpGet] // action method which is get by default when not written, so we don't need to write this
+        //[Authorize(Roles = "Admin")] // instead of using Authorize attribute above every action, it can be used above the controller and will execute for every action
         public IActionResult Create()
         {
             SetViewData();
@@ -77,6 +82,7 @@ namespace MVC.Controllers
         // POST: Roles/Create
         [HttpPost] // action method which is used for processing request data sent by a form or AJAX
         [ValidateAntiForgeryToken] // attribute for preventing Cross-Site Request Forgery (CSRF)
+        //[Authorize(Roles = "Admin")] // instead of using Authorize attribute above every action, it can be used above the controller and will execute for every action
         public IActionResult Create(RoleModel role) // the role data of type RoleModel that user enters in the Create view's form is submitted to this action
         {
             if (ModelState.IsValid) // validates the role action parameter (role model) through data annotations of its properties
@@ -110,6 +116,7 @@ namespace MVC.Controllers
         }
 
         // GET: Roles/Edit/5
+        //[Authorize(Roles = "Admin")] // instead of using Authorize attribute above every action, it can be used above the controller and will execute for every action
         public IActionResult Edit(int id)
         {
             // Get item to edit service logic:
@@ -123,6 +130,7 @@ namespace MVC.Controllers
         // POST: Roles/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")] // instead of using Authorize attribute above every action, it can be used above the controller and will execute for every action
         public IActionResult Edit(RoleModel role) // the role data that user enters in the Edit view's form is submitted to this action
         {
             if (ModelState.IsValid) // if there are no validation errors through data annotations of the role model
@@ -142,6 +150,7 @@ namespace MVC.Controllers
         }
 
         // GET: Roles/Delete/5
+        //[Authorize(Roles = "Admin")] // instead of using Authorize attribute above every action, it can be used above the controller and will execute for every action
         public IActionResult Delete(int id)
         {
             // Get item to delete service logic:
@@ -153,6 +162,7 @@ namespace MVC.Controllers
         [HttpPost, ActionName("Delete")] // ActionName attribute (Delete) renames and overrides the action method name (DeleteConfirmed) for the route
                                          // so that it can be requested as not Roles/DeleteConfirmed but as Roles/Delete.
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")] // instead of using Authorize attribute above every action, it can be used above the controller and will execute for every action
         public IActionResult DeleteConfirmed(int id)
         {
             // Delete item service logic:

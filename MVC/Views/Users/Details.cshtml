@@ -1,0 +1,93 @@
+﻿@model UserModel
+
+@* Generated from Custom Template. *@
+@* Model namespace using directive should be added to _ViewImports.cshtml. *@
+
+@{
+    var containerDivClass = "container";
+}
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="@containerDivClass">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+</div>
+
+@if (Model is not null)
+{
+<div class="@containerDivClass">
+    @if (TempData["Message"] is not null)
+    {
+    <p class="text-danger">
+        @TempData["Message"]
+    </p>
+    }
+
+    @* Way 1: displaying model properties in the view *@
+    @* <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.UserName)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.UserName)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Password)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Password)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.IsActive)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.IsActive)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Status)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Status)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Role)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Role)
+        </div>
+    </div> *@
+    @* Way 2: displaying model properties in a partial view, partial views are used for rounding up common parts of the views, created in Views/Users/_Details.cshtml *@
+    @* Partial view names generally start with "_". *@
+    @* HTML Helper: this view's model is passed to the partial view to show model data *@
+    @* @await Html.PartialAsync("_Details", Model) *@ @* methods ending with Async are asynchronous methods and should be awaited (await: asynchronous wait) for getting the result *@
+    @* Tag Helper: this view's model is passed to the partial view to show model data *@
+    <partial name="_Details" model="Model" />
+
+@* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. *@
+    @*
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            <b>@Html.DisplayNameFor(model => model.ManyToManyRecords)</b>
+        </div>
+        <div class="col-10">
+            @Html.Raw(Model.ManyToManyRecords)
+        </div>
+    </div>
+    *@
+
+    <hr /> 
+    <a asp-action="Edit" asp-route-id="@Model.Record.Id">Edit</a>&nbsp;|&nbsp;
+    <a asp-action="Delete" asp-route-id="@Model.Record.Id">Delete</a>&nbsp;|&nbsp;
+    <a asp-action="Index">Back to List</a>
+</div>
+}

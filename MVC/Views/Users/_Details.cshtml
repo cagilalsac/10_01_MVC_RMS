@@ -1,0 +1,51 @@
+﻿@* Partial view *@
+
+@model UserModel
+
+<div class="row mb-3">
+    <div class="col-2 fw-bold">
+        @Html.DisplayNameFor(model => model.UserName)
+    </div>
+    <div class="col-10">
+        @Html.DisplayFor(model => model.UserName)
+    </div>
+</div>
+
+@if (User.IsInRole("Admin")) // showing password only to the application users with role "Admin"
+{
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Password)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Password)
+        </div>
+    </div>
+}
+
+<div class="row mb-3">
+    <div class="col-2 fw-bold">
+        @Html.DisplayNameFor(model => model.IsActive)
+    </div>
+    <div class="col-10">
+        @Html.DisplayFor(model => model.IsActive)
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-2 fw-bold">
+        @Html.DisplayNameFor(model => model.Status)
+    </div>
+    <div class="col-10">
+        @Html.DisplayFor(model => model.Status)
+    </div>
+</div>
+
+@* Role: property for formatted or relational data in the model *@
+<div class="row mb-3">
+    <div class="col-2 fw-bold">
+        @Html.DisplayNameFor(model => model.Role)
+    </div>
+    <div class="col-10">
+        @Html.DisplayFor(model => model.Role)
+    </div>
+</div>

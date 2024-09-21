@@ -1,0 +1,94 @@
+﻿@model ResourceModel
+
+@* Generated from Custom Template. *@
+@* Model namespace using directive should be added to _ViewImports.cshtml. *@
+
+@{
+    var containerDivClass = "container";
+}
+@{
+    ViewData["Title"] = "Resource Details";
+}
+
+<div class="@containerDivClass">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+</div>
+
+@if (Model is not null)
+{
+<div class="@containerDivClass">
+    @if (TempData["Message"] is not null)
+    {
+    <p class="text-danger">
+        @TempData["Message"]
+    </p>
+    }
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Title)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Title)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Content)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Content)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Score)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Score)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Date)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Date)
+        </div>
+    </div>
+
+@* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. *@
+    @* Users: property for formatted or relational data in the model *@
+    @* Displaying the many to many user relational data of the resource: *@
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            <b>@Html.DisplayNameFor(model => model.Users)</b>
+        </div>
+        <div class="col-10">
+            @Html.Raw(Model.Users) @* Html.DisplayFor Helper can also be used since Users string doesn't contain any HTML tags *@
+        </div>
+    </div>
+   
+
+    <hr /> 
+
+        @*
+        for User role if application user Id is in the UserIds collection of the resource item,
+        show Edit and Delete links since the resource item belongs to the user who created the resource,
+        for Admin role, show Edit and Delete links
+        *@
+        @{
+            // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
+            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Sid).Value); // System.Security.Claims namespace can be used 
+                                                                                                                                   // instead of adding using directive on top
+                                                                                                                                   // to use the ClaimTypes class
+            if (User.IsInRole("Admin") || (User.IsInRole("User") && Model.UserIds.Contains(userId)))
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Record.Id">Edit</a>@:&nbsp;|&nbsp;
+                <a asp-action="Delete" asp-route-id="@Model.Record.Id">Delete</a>@:&nbsp;|&nbsp;
+            }
+        }
+
+    <a asp-action="Index">Back to List</a>
+</div>
+}

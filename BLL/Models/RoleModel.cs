@@ -29,14 +29,20 @@ namespace BLL.Models
                                            // we create models and set entity property values with same property names.
                                            // Display name of a property is not related to the database, thus it shouldn't be in entity classes.
                                            // In models we can use any extra attributes we need or do any extra property implementations.
+                                           // Although we can use the Record reference's Name property instead of creating the same property in
+                                           // the model, we should create it in the model too so that we can provide a standardization for models.
+
+
 
         // Extra optional properties for displaying Record data in the views:
+        // 1 to many relationship relational data handling for output to display:
         [DisplayName("User Count")]
         public string UserCount => Record.Users?.Count.ToString(); // "?" used after a reference variable, field or property (Users) indicates that
                                                                    // it may be null. If Users collection is null, assign null to the UserCount property,
                                                                    // otherwise assign the Users collection's element count as string.
-                                                                   // "?" should be used for all Navigational Properties which is only Users here.
+                                                                   // "?" should be used for all entity Navigational Properties which is only Users here.
 
+        // 1 to many relationship relational data handling for output to display:
         public string Users => string.Join("<br>", Record.Users?.Select(u => u.UserName));  // we reach the Record's Users Navigational Property and project
                                                                                             // each User entity's UserName value to a string collection (IEnumerable),
                                                                                             // then we concatenate each string value in the collection

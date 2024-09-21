@@ -20,7 +20,6 @@ namespace BLL.DAL
         // fields (class variables), behaviors (methods) or classes.
         // For entities C# Attributes are called Data Annotations and they gain new features to the
         // properties, fields, behaviors or classes by the implementation of Aspect Oriented Programming.
-        // Data Annotations can also be used in models when necessary.
         public string Name { get; set; } // instead of "string", "String" class type can also be used, general usage "string" data type,
                                          // value assignment is not required (can be assigned as null)
                                          // because the type of the property is "string" which is a reference type in C#,

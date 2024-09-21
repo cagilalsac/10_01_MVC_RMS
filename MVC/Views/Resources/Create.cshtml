@@ -1,0 +1,105 @@
+﻿@model ResourceModel
+
+@* Generated from Custom Template. *@
+@* Model namespace using directive should be added to _ViewImports.cshtml. *@
+
+@{
+    var containerDivClass = "container";
+
+    var dateTimePickerClass = "datetimepicker"; @* 
+                                                Before using this CSS class, "jquery-datetimepicker" Javascript and CSS library must be added to the project 
+                                                by right-clicking on wwwroot -> lib, selecting Add -> Client-Side Library.
+                                                Then a partial view called "_DateTimePicker.cshtml" must be created under the Views/Shared folder,
+                                                therefore we can add it in the Scripts section of any view whenever we need to use a calendar.
+                                                If date and time picker are going to be used, "datetimepicker" must be assigned to the dateTimePickerClass variable,
+                                                if only date picker is going to be used, "datepicker" must be assigned.
+                                                *@
+
+}
+@{
+    ViewData["Title"] = "Resource Create";
+}
+
+<div class="@containerDivClass">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+</div>
+
+<div class="@containerDivClass">
+    @if (TempData["Message"] is not null)
+    {
+    <p class="text-danger">
+        @TempData["Message"]
+    </p>
+    }
+    <form asp-action="Create" autocomplete="off">
+		@Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row mb-3">
+            <label asp-for="Title" class="col-2 col-form-label fw-bold"></label>
+			<div class="col-10">
+			    <input asp-for="Record.Title" class="form-control" />
+				<span asp-validation-for="Record.Title" class="text-danger"></span>
+			</div>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Content" class="col-2 col-form-label fw-bold"></label>
+			<div class="col-10">
+			    <input asp-for="Record.Content" class="form-control" />
+				<span asp-validation-for="Record.Content" class="text-danger"></span>
+			</div>
+        </div>
+
+        @* 
+        The application users with role "User" shouldn't give scores to their resources. 
+        They also shouldn't set a date since it will be automatically assigned in the action.
+        They also shouldn't select users since their user ids will be automatically assigned in the action.
+        So these fields should be only shown to the application users with role "Admin".
+        *@
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="row mb-3">
+                <label asp-for="Score" class="col-2 col-form-label fw-bold"></label>
+			    <div class="col-10">
+			        <input asp-for="Record.Score" class="form-control" />
+				    <span asp-validation-for="Record.Score" class="text-danger"></span>
+			    </div>
+            </div>
+            <div class="row mb-3">
+                <label asp-for="Date" class="col-2 col-form-label fw-bold"></label>
+                <div class="col-10">
+                    <input asp-for="Record.Date" class="form-control @dateTimePickerClass" type="text" />
+                    <span asp-validation-for="Record.Date" class="text-danger"></span>
+                </div>
+            </div>
+
+@* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. *@
+            @*
+            The ViewData set in the action will be filled as items of the select HTML tag with multiple attribute.
+            The selected user Id values will be sent to the post action with the resource model's Record.UserIds property.
+            *@
+            <div class="row mb-3">
+                <label asp-for="UserIds" class="col-2 col-form-label fw-bold"></label>
+	            <div class="col-10">
+		            <select multiple asp-for="UserIds" class="form-select" asp-items="ViewBag.UserIds"></select> @* list box *@
+		            <span asp-validation-for="UserIds" class="text-danger"></span>
+	            </div>
+            </div>
+        }
+
+        <hr />  
+        <div class="row mb-3">
+			<div class="offset-2 col-10">
+                <button type="submit" class="btn btn-primary">Save</button>
+				&nbsp;&nbsp;
+                <button type="reset" class="btn btn-outline-primary">Reset</button>
+				&nbsp;&nbsp;
+				<a asp-action="Index">Back to List</a>
+			</div>
+        </div>
+    </form>
+</div>  
+
+@section Scripts {
+    <partial name="_DateTimePicker" /> @* to use the calendar from the jquery-datetimepicker Javascript and CSS library *@
+}

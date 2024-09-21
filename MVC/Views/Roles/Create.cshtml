@@ -56,7 +56,10 @@
                 @* <input name="Record.Name" type="text" class="form-control" placeholder="Enter name..." /> *@
                 @* HTML Helper: renders an input tag for the model delegate's Record.Name property with the specified CSS class and the placeholder HTML attribute *@
                 @* @Html.TextBoxFor(model => model.Record.Name, new { @class = "form-control", placeholder = "Enter name..." }) *@
-                @* Tag Helper: renders an input tag for the model delegate's Record.Name property with the specified CSS class and the placeholder HTML attribute *@
+                @* 
+                   Tag Helper: renders an input tag for the model delegate's Record.Name property with the specified CSS class and the placeholder HTML attribute,
+                   Tag Helpers generate the HTML tag according to the model property type (here text box will be generated since the model property type is string)
+                *@
                 <input asp-for="Record.Name" class="form-control" placeholder="Enter name..." />
 
                 @* 

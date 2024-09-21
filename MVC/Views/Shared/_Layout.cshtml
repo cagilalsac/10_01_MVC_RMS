@@ -28,48 +28,44 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
-                        @if (User.Identity.IsAuthenticated) // show link to only logged in users with authentication cookie
+                        @*
+                        application user's authentication cookie can be checked by the User object's Identity property reference's IsAuthenticated boolean property
+                        *@
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            @* session example: *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Favorites" asp-action="Index">Favorites</a>
-                            </li>
+                            @*
+                            application user's role name can be checked by the User object's IsInRole method, this method also checks whether the application user
+                            is authenticated or not, show "Roles" link for only application users with role "Admin" 
+                            *@
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                                </li>
+                            }
 
+                            // show "Users" link for application users with roles "Admin" or "User"
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
                             </li>
                         }
 
-                        @*
-                        application user's role name can be checked by the User object's IsInRole method,
-                        this method also checks whether the application user is authenticated or not,
-                        display "Roles" link for only application users with role "Admin"
-                        *@
-                        @* @if (User.IsInRole("Admin"))
-                        { *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                            </li>
-                        @* } *@
-
-                        @* show link to everyone *@
+                        @* show "Resources" link to everyone *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Resources" asp-action="Index">Resources</a>
                         </li>
 
                     </ul>
 
-                    @* displaying the links about account on the right *@
+                    @* displaying the links about account on the right: *@
                     <div class="navbar-text">
                         <ul class="navbar-nav me-auto">
 
                             @*
-                            application user's authentication cookie can be checked by the User object's Identity property reference's
-                            IsAuthenticated boolean property,
-                            application user's user name in the authentication cookie can be used by User object's Identity property
-                            reference's Name string property
+                            application user's authentication cookie can be checked by the User object's Identity property reference's IsAuthenticated boolean property, 
+                            application user's user name in the authentication cookie can be used by User object's Identity property reference's Name string property
                             *@
-                            @if (!User.Identity.IsAuthenticated)
+                            @if (!User.Identity.IsAuthenticated) // if application user doesn't have an authentication cookie, thus not logged in
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
@@ -78,10 +74,10 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
                                 </li>
                             }
-                            else
+                            else // if application user has an authentication cookie, thus logged in
                             {
                                 <li class="nav-item pt-2">@* pt-2 Bootstrap class: padding top 2 units *@
-                                    <span class="badge bg-info text-black">@User.Identity.Name</span>@* displaying the user name *@
+                                    <span class="badge bg-black text-white">@User.Identity.Name</span> @* displaying the user name *@
                                 </li>
 
                                 @* writing escaped text in Razor C# code: *@
@@ -94,6 +90,7 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
                                 </li>
                             }
+
                         </ul>
                     </div>
                 </div>

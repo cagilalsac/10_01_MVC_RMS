@@ -1,4 +1,4 @@
-﻿@model RoleModel
+﻿@model ResourceModel
 
 @* Generated from Custom Template. *@
 @* Model namespace using directive should be added to _ViewImports.cshtml. *@
@@ -7,7 +7,7 @@
     var containerDivClass = "container";
 }
 @{
-    ViewData["Title"] = "Role Delete";
+    ViewData["Title"] = "Resource Delete";
 }
 
 <div class="@containerDivClass">
@@ -28,41 +28,50 @@
     <hr />
     <div class="row mb-3">
         <div class="col-2 fw-bold">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Title)
         </div>
         <div class="col-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Title)
         </div>
     </div>
-
-    @* Users: property for formatted or relational data in the model *@
     <div class="row mb-3">
         <div class="col-2 fw-bold">
-            @Html.DisplayNameFor(model => model.Users)
+            @Html.DisplayNameFor(model => model.Content)
         </div>
         <div class="col-10">
-            @Html.Raw(Model.Users)
+            @Html.DisplayFor(model => model.Content)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Score)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Score)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Date)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Date)
         </div>
     </div>
 
 @* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. *@
-    @*
+    @* Users: property for formatted or relational data in the model *@
+    @* Displaying the many to many user relational data of the resource: *@
     <div class="row mb-3">
         <div class="col-2 fw-bold">
-            <b>@Html.DisplayNameFor(model => model.ManyToManyRecords)</b>
+            <b>@Html.DisplayNameFor(model => model.Users)</b>
         </div>
         <div class="col-10">
-            @Html.Raw(Model.ManyToManyRecords)
+            @Html.Raw(Model.Users) @* Html.DisplayFor Helper can also be used since Users string doesn't contain any HTML tags *@
         </div>
     </div>
-    *@
 
     <hr />
-
-    @*
-    The Record.Id value of the model will be sent to the Roles controller Delete post action when we click the Yes submit button so that
-    the role with the id in the Roles table can be deleted by the delete service method.
-    *@
     <form asp-action="Delete">
 	    @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Record.Id" />
