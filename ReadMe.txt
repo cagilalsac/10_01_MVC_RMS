@@ -206,3 +206,7 @@ or above specific actions. "Authorize" attribute checks whether the authenticati
 8.14) In controller actions and views, "User" object can be used to get the authenticated user information through the authentication cookie. 
 "User.Identity.IsAuthenticated" checks whether the authentication cookie exists or not, "User.Identity.Name" returns the authenticated user's user name and 
 "User.IsInRole(roleName)" method checks whether the authenticated user has the specified role name sent as parameter.
+
+8.15) If you want to use "Sneat Dashboard Bootstrap 5" template, copy the "sneat" folder under the "wwwroot" folder of this MVC Project to your MVC Project's "wwwroot" folder 
+and copy the "_SneatLayout.cshtml" file under "Views/Shared" folder of this MVC Project to your MVC Project's "Views/Shared" folder, 
+then modify the title, links, icons, etc. in this layout view.
