@@ -47,9 +47,9 @@ namespace BLL.Models
         [DisplayName("Users")]
         public List<int> UserIds 
         {
-            get => Record.UserResources.Select(ur => ur.UserId).ToList(); // return the projection of UserIds integer list from entity's UserResources list,
-                                                                          // for retrieving the model data in edit operation,
-                                                                          // no need to use "?" after UserResources
+            get => Record.UserResources?.Select(ur => ur.UserId).ToList(); // for retrieving the model data in edit operation,
+                                                                           // return the projection of UserIds integer list from entity's UserResources list if not null,
+                                                                           // if entity's UserResources list is null return null
             set => Record.UserResources = value.Select(v => new UserResource() { UserId = v }).ToList(); // set entity's UserResources list from the value,
                                                                                                          // which is an integer list containing the ids of the users,
                                                                                                          // selected in the view for inserting or updating the model data
