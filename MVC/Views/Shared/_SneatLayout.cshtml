@@ -242,7 +242,7 @@
     <script>
         $(function () {
             $("#layout-menu ul.menu-inner li.menu-item").each(function () {
-                if ($(this).children("a.menu-link")[0].pathname == window.location.pathname) {
+                if ($(this).children("a.menu-link")[0].pathname.split("/")[1] == window.location.pathname.split("/")[1]) {
                     $(this).addClass("active");
                     $(this).parent("ul.menu-sub").parent("li.menu-item").addClass("open");
                 } else {
