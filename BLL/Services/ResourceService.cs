@@ -34,6 +34,9 @@ namespace BLL.Services
 
         public Service Create(Resource resource)
         {
+            if (resource.Score < 1 || resource.Score > 5)
+                return Error("Score must be between 1 and 5!");
+
             if (!resource.UserResources.Any())
                 return Error("At least one user must be selected!");
 
@@ -53,6 +56,9 @@ namespace BLL.Services
 
         public Service Update(Resource resource)
         {
+            if (resource.Score < 1 || resource.Score > 5)
+                return Error("Score must be between 1 and 5!");
+
             if (!resource.UserResources.Any())
                 return Error("At least one user must be selected!");
 

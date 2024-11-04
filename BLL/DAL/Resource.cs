@@ -20,8 +20,8 @@ namespace BLL.DAL
                                                                            // {0} placeholder uses the property's display name if exists, otherwise property name
         // Way 2:
         //[Range(0, 5, ErrorMessage = "This field must be between {1} and {2}!")] // Output: "This field must be between 0 and 5!"
-        // Way 3:
-        [Range(0, 5)]
+        // Way 3: can also be validated in ResourceService class Create and Update methods
+        //[Range(1, 5)]
         public decimal Score { get; set; } // can't be null,
                                            // decimal number data types: float, double and decimal,
                                            // example value assignment for decimal: = 1.2m or 1.2M, 
