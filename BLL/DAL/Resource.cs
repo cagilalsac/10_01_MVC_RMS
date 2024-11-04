@@ -16,10 +16,10 @@ namespace BLL.DAL
         public string Content { get; set; } // can be null
 
         // Way 1:
-        //[Range(0, 5, ErrorMessage = "{0} must be between {1} and {2}!")] // Output: "Score must be between 0 and 5!",
+        //[Range(1, 5, ErrorMessage = "{0} must be between {1} and {2}!")] // Output: "Score must be between 1 and 5!",
                                                                            // {0} placeholder uses the property's display name if exists, otherwise property name
         // Way 2:
-        //[Range(0, 5, ErrorMessage = "This field must be between {1} and {2}!")] // Output: "This field must be between 0 and 5!"
+        //[Range(1, 5, ErrorMessage = "This field must be between {1} and {2}!")] // Output: "This field must be between 1 and 5!"
         // Way 3: can also be validated in ResourceService class Create and Update methods
         //[Range(1, 5)]
         public decimal Score { get; set; } // can't be null,
