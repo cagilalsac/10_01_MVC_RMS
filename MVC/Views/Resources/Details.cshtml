@@ -57,7 +57,7 @@
         </div>
     </div>
 
-@* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. *@
+@* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. *@
     @* Users: property for formatted or relational data in the model *@
     @* Displaying the many to many user relational data of the resource: *@
     <div class="row mb-3">
@@ -78,10 +78,8 @@
         for Admin role, show Edit and Delete links
         *@
         @{
-            // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
-            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Sid).Value); // System.Security.Claims namespace can be used 
-                                                                                                                                   // instead of adding using directive on top
-                                                                                                                                   // to use the ClaimTypes class
+            // retrieving the user Id from user claims for type Id and converting its string value to integer, then assigning its value to the userId variable
+            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == "Id").Value); 
             if (User.IsInRole("Admin") || (User.IsInRole("User") && Model.UserIds.Contains(userId)))
             {
                 <a asp-action="Edit" asp-route-id="@Model.Record.Id">Edit</a>@:&nbsp;|&nbsp;

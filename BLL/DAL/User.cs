@@ -1,12 +1,11 @@
-#nullable disable
-
-using BLL.DAL.Bases;
 using System.ComponentModel.DataAnnotations;
 
 namespace BLL.DAL
 {
-    public class User : Record
+    public class User
     {
+        public int Id { get; set; }
+
         // Way 1: all data annotations can be used with or without ErrorMessage
         //[Required]
         // Way 2: overriding default validation error message

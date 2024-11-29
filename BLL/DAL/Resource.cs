@@ -1,12 +1,11 @@
-#nullable disable
-
-using BLL.DAL.Bases;
 using System.ComponentModel.DataAnnotations;
 
 namespace BLL.DAL
 {
-    public class Resource : Record
+    public class Resource
     {
+        public int Id { get; set; }
+
         [Required]
         [StringLength(50)]
         public string Title { get; set; } // can't be null

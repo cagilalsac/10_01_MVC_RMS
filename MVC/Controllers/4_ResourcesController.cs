@@ -1,11 +1,11 @@
 ﻿#nullable disable
+using BLL.Controllers.Bases;
+using BLL.DAL;
+using BLL.Models;
+using BLL.Services.Bases;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BLL.Controllers.Bases;
-using BLL.Services;
-using BLL.Models;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 // Generated from Custom Template.
 
@@ -15,21 +15,21 @@ namespace MVC.Controllers
     public class ResourcesController : MvcController
     {
         // Service injections:
-        private readonly IResourceService _resourceService;
+        private readonly IService<Resource, ResourceModel> _resourceService;
 
-        /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-        private readonly IUserService _userService; // for the injection of user service for retrieving user data to be used in create and edit actions
+        /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+        private readonly IService<User, UserModel> _userService; // for the injection of user service for retrieving user data to be used in create and edit actions
 
         public ResourcesController(
-			IResourceService resourceService
+            IService<Resource, ResourceModel> resourceService
 
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-            , IUserService userService
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+            , IService<User, UserModel> userService
         )
         {
             _resourceService = resourceService;
 
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
             _userService = userService;
         }
 
@@ -67,7 +67,7 @@ namespace MVC.Controllers
         {
             // Related items service logic to set ViewData (Record.Id and Name parameters may need to be changed in the SelectList constructor according to the model):
 
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
             ViewBag.UserIds = new MultiSelectList(_userService.Query().ToList(), "Record.Id", "UserName"); // will be used in the list boxes in the Create and Edit views
         }
 
@@ -88,8 +88,8 @@ namespace MVC.Controllers
                 {
                     int userId; // used for allowing application users with role "User" to only create their own resources, not other users' resources
 
-                    // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
-                    userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+                    // retrieving the user Id from user claims for type Id and converting its string value to integer, then assigning its value to the userId variable
+                    userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == "Id").Value);
 
                     resource.UserIds = new List<int>() { userId }; // initializing the UserIds of the resource parameter with the retrieved userId
 
@@ -122,8 +122,8 @@ namespace MVC.Controllers
 
             // for User role checking whether the resource to be edited belongs to the user who created the resource, or not:
 
-            // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
-            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+            // retrieving the user Id from user claims for type Id and converting its string value to integer, then assigning its value to the userId variable
+            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == "Id").Value);
 
             if (User.IsInRole("User") && !item.UserIds.Contains(userId)) // Contains method of collections returns true if parameter exists in the collection, otherwise false
                 return View("_Error", "Edit operation is not allowed since you don't own the resource!");
@@ -140,8 +140,8 @@ namespace MVC.Controllers
             {
                 if (User.IsInRole("User")) // for User role, we initialize the UserIds with the authenticated user's Id for assigning resource to the user who edits the resource
                 {
-                    // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
-                    var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+                    // retrieving the user Id from user claims for type Id and converting its string value to integer, then assigning its value to the userId variable
+                    var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == "Id").Value);
 
                     resource.UserIds = new List<int>() { userId }; // initializing the UserIds of the resource parameter with the retrieved userId
 
@@ -174,8 +174,8 @@ namespace MVC.Controllers
 
             // for User role checking whether the resource to be deleted belongs to the user who created the resource, or not:
 
-            // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
-            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+            // retrieving the user Id from user claims for type Id and converting its string value to integer, then assigning its value to the userId variable
+            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == "Id").Value);
 
             if (User.IsInRole("User") && !item.UserIds.Contains(userId)) // Contains method of collections returns true if parameter exists in the collection, otherwise false
                 return View("_Error", "Delete operation is not allowed since you don't own the resource!");

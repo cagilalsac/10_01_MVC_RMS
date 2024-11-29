@@ -34,7 +34,7 @@ Enter the "Context name" Db and "Namespace" BLL and enter DAL for "EntityTypes p
 and uncheck "Install the EF Core provider package in the project" and click the OK button. If you are using Visual Studio Code, you may not be able to use this tool so
 just copy the DAL folder under your BLL Project folder. You can skip the operations numbered as 2, 3, 4, 5 and 6 for Database-First Development.
 
-2) We will use Code-First Development in this project so under the DAL folder in the BLL Project, entities are created by inheriting from the Record abstract base class.
+2) We will use Code-First Development in this project so under the DAL folder in the BLL Project, entities are created.
 
 3) In the BLL, Microsoft.EntityFrameworkCore.SqlServer package is downloaded through NuGet. The .NET version you are using determines which packages with that version number 
 should be downloaded from NuGet. For example, if you are using .NET 8, you should look for the packages compatible with .NET 8 and install their latest versions. 
@@ -85,16 +85,17 @@ Created controller names must always end with "Controller".
 
 8.1) In the BLL Project, Services folder is created and under this folder service classes with their interfaces for CRUD and other operations are created. 
 Since this is a small project, the interfaces and classes of the services will be in the same file but generally a Bases folder is created under the Services folder 
-and abstract classes or interfaces are created in the Base folder, concrete classes which inherit the abstract classes or implement the interfaces are created 
+and abstract classes or interfaces are created in the Bases folder, concrete classes which inherit the abstract classes or implement the interfaces are created 
 in the Services folder. Services are used for the assignment of database table raw data from entities to the models by assigning the queried entity to the 
 model's entity property which we will call Record. Record and other properties in the model will be used for user interaction in the MVC project. 
 Creating an abstract service base class (Service) and inheriting all of the service classes from this class with the implementation of related interfaces is a good way 
-for managing the DbContext object injection and managing operation results.
+for managing the DbContext object injection and managing operation results. Also creating a generic interface as IService in the Bases folder and implementing this
+interface to all of the concrete service classes prevents the code repetition, so we won't need to create an interface for every concrete service class.
 
 The data flow from the view to the database or from database to the view can be shown as below:
 View <-> Controller (Action) <-> Service (Model) <-> DbContext (Entity) <-> Database
 
-8.2) In the MVC Project, in the Program.cs file, the created service inversion of control must be added into the IoC Container.
+8.2) In the MVC Project, in the Program.cs file, the created services inversion of control must be added into the IoC Container.
 
 8.3) In the BLL Project, Models folder is created and under this folder model classes are created by firstly creating a related entity property called Record. 
 Other model class properties are created from Record entity properties by using getters in order to format the entity property value or 

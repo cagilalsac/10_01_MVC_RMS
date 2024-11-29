@@ -1,5 +1,3 @@
-#nullable disable
-
 namespace BLL.Models
 {
     /// <summary>

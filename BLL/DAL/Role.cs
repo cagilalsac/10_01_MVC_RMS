@@ -1,19 +1,19 @@
-#nullable disable
+// Way 1: For all entities and models, #nullable disable can be added for preventing reference type property validations
+// which will cause validation errors if reference types are not declared as nullable using ? such as
+// public string? Name { get; set; } or public List<User>? Users { get; set; }
+//#nullable disable
+// Way 2: Nullable disable can also be configured for the whole projects through the project properties by right clicking
+// the project then setting Nullable configuration to Disable, this must be done for both BLL and MVC Projects
 
-using BLL.DAL.Bases; // Since Record class is under different folder therefore different namespace (DAL.Bases),
-                     // we can include the namespace with "using" (similar to import in Java),
-                     // therefore we can use the classes in the namespace directly.
 using System.ComponentModel.DataAnnotations; // This using directive should also be added for using classes by only their names
                                              // such as Required and StringLength.
 
 namespace BLL.DAL
 {
-    // Way 1:
-    //public class Role : BLL.DAL.Bases.Record
-    // Way 2:
-    public class Role : Record // Role is a Record relationship,
-                               // no need to write the namespace of the class if using directive is added at the top.
+    public class Role
     {
+        public int Id { get; set; }
+
         [Required] // can't be null
         [StringLength(5)] // must have maximum 5 characters
         // Required and StringLength are called C# Attributes and may be used on top of properties,

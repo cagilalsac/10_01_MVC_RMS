@@ -1,6 +1,7 @@
 using BLL.DAL;
 using BLL.Models;
 using BLL.Services;
+using BLL.Services.Bases;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,11 +49,13 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
 // builder.Services.AddSingleton<IRoleService, RoleService>();
 // Way 2:
 // builder.Services.AddTransient<IRoleService, RoleService>();
-// Way 3:
-builder.Services.AddScoped<IRoleService, RoleService>();
+// Way 3 (Abstract Classes or Interfaces Way 1):
+//builder.Services.AddScoped<IRoleService, RoleService>();
+// Abstract Classes or Interfaces Way 2:
+builder.Services.AddScoped<IService<Role, RoleModel>, RoleService>();
 
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IResourceService, ResourceService>();
+builder.Services.AddScoped<IService<User, UserModel>, UserService>();
+builder.Services.AddScoped<IService<Resource, ResourceModel>, ResourceService>();
 
 // Authentication:
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme) // we are adding authentication to the project using default Cookie authentication

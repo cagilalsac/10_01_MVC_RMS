@@ -5,43 +5,48 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
-    /// <summary>
-    /// Performs role CRUD operations.
-    /// </summary>
-    public interface IRoleService // summary can be used for displaying the explanation when mouse is hovered over this type (IRoleService) anywhere in the project,
-                                  // summaries can be written above interfaces, classes, methods and properties by hitting "/" character on the keyboard 3 times
-    {
-        // method definitions: method definitions must be created here for what the class implements this interface can do and to be used in the controllers
+    // Abstract Classes or Interfaces Way 1: Creating an interface for every concrete service class
+    ///// <summary>
+    ///// Performs role CRUD operations.
+    ///// </summary>
+    //public interface IRoleService // summary can be used for displaying the explanation when mouse is hovered over this type (IRoleService) anywhere in the project,
+    //                              // summaries can be written above interfaces, classes, methods and properties by hitting "/" character on the keyboard 3 times
+    //{
+    //    // method definitions: method definitions must be created here for what the class implements this interface can do and to be used in the controllers
 
-        /// <summary>
-        /// Queries and returns role data query from the Roles table.
-        /// </summary>
-        /// <returns>IQueryable</returns>
-        public IQueryable<RoleModel> Query();
+    //    /// <summary>
+    //    /// Queries and returns role data query from the Roles table.
+    //    /// </summary>
+    //    /// <returns>IQueryable</returns>
+    //    public IQueryable<RoleModel> Query();
 
-        /// <summary>
-        /// Inserts the role data to the Roles table. IsSuccessful and Message properties can be used for the operation result after method invocation.
-        /// </summary>
-        /// <param name="role"></param>
-        /// <returns>Service</returns>
-        public Service Create(Role role);
+    //    /// <summary>
+    //    /// Inserts the role data to the Roles table. IsSuccessful and Message properties can be used for the operation result after method invocation.
+    //    /// </summary>
+    //    /// <param name="role"></param>
+    //    /// <returns>Service</returns>
+    //    public Service Create(Role role);
 
-        /// <summary>
-        /// Updates the role data in the Roles table by role parameter's Id value. IsSuccessful and Message properties can be used for the operation result after method invocation.
-        /// </summary>
-        /// <param name="role"></param>
-        /// <returns>Service</returns>
-        public Service Update(Role role);
+    //    /// <summary>
+    //    /// Updates the role data in the Roles table by role parameter's Id value. IsSuccessful and Message properties can be used for the operation result after method invocation.
+    //    /// </summary>
+    //    /// <param name="role"></param>
+    //    /// <returns>Service</returns>
+    //    public Service Update(Role role);
 
-        /// <summary>
-        /// Deletes the role data in the Roles table by role id parameter. IsSuccessful and Message properties can be used for the operation result after method invocation.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Service</returns>
-        public Service Delete(int id);
-    }
+    //    /// <summary>
+    //    /// Deletes the role data in the Roles table by role id parameter. IsSuccessful and Message properties can be used for the operation result after method invocation.
+    //    /// </summary>
+    //    /// <param name="id"></param>
+    //    /// <returns>Service</returns>
+    //    public Service Delete(int id);
+    //}
 
-    public class RoleService : Service, IRoleService // RoleService is a Service and implements IRoleService
+    // Abstract Classes or Interfaces Way 1:
+    //public class RoleService : Service, IRoleService // RoleService is a Service and implements IRoleService
+    // Abstract Classes or Interfaces Way 2: Instead of creating an interface for every concrete service class,
+    // we can implement the IService generic interface within the Bases folder
+    public class RoleService : Service, IService<Role, RoleModel> // RoleService is a Service and implements IService
     {
         public RoleService(Db db) : base(db) // DbContext object base service class Constructor Injection
         {

@@ -5,28 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
-    public interface IUserService
-    {
-        public IQueryable<UserModel> Query();
-        public Service Create(User user);
-        public Service Update(User user);
-        public Service Delete(int id);
-
-        // Optionally new methods that invokes the existing methods can be added to the interface and they can be used in the controller actions:
-        public List<UserModel> GetList() => Query().ToList(); // returns the users as UserModel collection
-        public UserModel GetItem(int id) => Query().SingleOrDefault(q => q.Record.Id == id); // returns the user by id as UserModel item
-
-        // Region can be used to group relevant code.
-        #region Account Property and Method Definitions:
-        public UserModel LoggedInUser { get; set; } // we return the result of the Login operation by the Service type, however we also need to return
-                                                    // the user information, therefore we will set this property in the Login method below and use it in the
-                                                    // Users controller's Login post action to reach the user data
-        public Service Login(User user);
-        public Service Register(User user);
-        #endregion
-    }
-
-    public class UserService : Service, IUserService
+    public class UserService : Service, IService<User, UserModel>
     {
         public UserService(Db db) : base(db)
         {
@@ -145,26 +124,7 @@ namespace BLL.Services
 
 
         // Region can be used to group relevant code.
-        #region Account Property and Method Implementations:
-        public UserModel LoggedInUser { get; set; }
-
-        public Service Login(User user)
-        {
-            // checking an active user exists in the database by user name and password
-            var entity = _db.Users.Include(u => u.Role).SingleOrDefault(u => u.UserName == user.UserName && u.Password == user.Password && u.IsActive);
-
-            if (entity is null) // if user doesn't exist
-                return Error("Invalid user name and password!"); // returning invalid user error result
-
-            // if user exists, LoggedInUser property is initialized with the User entity to be used in the Users controller's Login action
-            LoggedInUser = new UserModel()
-            {
-                Record = entity
-            };
-
-            return Success("User logged in successfully."); // returning success login operation result
-        }
-
+        #region Account Method Implementations:
         public Service Register(User user)
         {
             // checking whether or not an active user with the same user name exists in the database

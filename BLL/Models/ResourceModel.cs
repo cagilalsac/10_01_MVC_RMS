@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using BLL.DAL;
+﻿using BLL.DAL;
 using System.ComponentModel;
 using System.Globalization;
 

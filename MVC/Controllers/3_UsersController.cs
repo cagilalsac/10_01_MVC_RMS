@@ -3,8 +3,9 @@ using BLL.Controllers.Bases;
 using BLL.DAL;
 using BLL.Models;
 using BLL.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using BLL.Services.Bases;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,36 +22,32 @@ namespace MVC.Controllers
     public class UsersController : MvcController
     {
         // Service injections:
-        private readonly IUserService _userService;
-        private readonly IRoleService _roleService; // for the injection of role service for retrieving role data to be used in create and edit actions
+        private readonly IService<User, UserModel> _userService;
+        private readonly IService<Role, RoleModel> _roleService; // for the injection of role service for retrieving role data to be used in create and edit actions
 
-        /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-        //private readonly IManyToManyRecordService _ManyToManyRecordService;
+        /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+        //private readonly I{Entity}Service _{Entity}Service;
 
         public UsersController(
-			IUserService userService
-            , IRoleService roleService
+            IService<User, UserModel> userService
+            , IService<Role, RoleModel> roleService
 
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-            //, IManyToManyRecordService ManyToManyRecordService
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+            //, I{Entity}Service {Entity}Service
         )
         {
             _userService = userService;
             _roleService = roleService;
 
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-            //_ManyToManyRecordService = ManyToManyRecordService;
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+            //_{Entity}Service = {Entity}Service;
         }
 
         // GET: Users
         public IActionResult Index() // only authenticated users with roles "Admin" or "User" can execute this action
         {
             // Get collection service logic:
-            // Way 1:
-            //var list = _userService.Query().ToList();
-            // Way 2: instead of invoking the Query method then getting a list with ToList method,
-            // new GetList method we implemented in the service interface can be invoked
-            var list = _userService.GetList();
+            var list = _userService.Query().ToList();
             return View(list);
         }
 
@@ -59,11 +56,7 @@ namespace MVC.Controllers
         public IActionResult Details(int id) // only authenticated users with role "Admin" can execute this action
         {
             // Get item service logic:
-            // Way 1:
-            //var item = _userService.Query().SingleOrDefault(q => q.Record.Id == id);
-            // Way 2: instead of invoking the Query method then getting the item by id with SingleOrDefault method,
-            // new GetItem method we implemented in the service interface can be invoked
-            var item = _userService.GetItem(id);
+            var item = _userService.Query().SingleOrDefault(q => q.Record.Id == id);
             return View(item);
         }
 
@@ -86,8 +79,8 @@ namespace MVC.Controllers
                                                                                                  // to be shown to the user through related model property name (Name) and
                                                                                                  // assignment to the ViewData collection through the RoleId key
 
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-            //ViewBag.ManyToManyRecordIds = new MultiSelectList(_ManyToManyRecordService.Query().ToList(), "Record.Id", "Name");
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+            //ViewBag.{Entity}Ids = new MultiSelectList(_{Entity}Service.Query().ToList(), "Record.Id", "Name");
         }
 
         // GET: Users/Create
@@ -136,11 +129,7 @@ namespace MVC.Controllers
         {
             // Get item to edit service logic:
 
-            // Way 1:
-            //var item = _userService.Query().SingleOrDefault(q => q.Record.Id == id);
-            // Way 2: instead of invoking the Query method then getting the item by id with SingleOrDefault method,
-            // new GetItem method we implemented in the service interface can be invoked
-            var item = _userService.GetItem(id);
+            var item = _userService.Query().SingleOrDefault(q => q.Record.Id == id);
 
             SetViewData();
             return View(item);
@@ -171,8 +160,8 @@ namespace MVC.Controllers
         public IActionResult Delete(int id) // only authenticated users with roles "Admin" or "User" can execute this action
         {
             // Checking if the application user's role is User and id parameter value is the application user's Id value for allowing users to delete their own user data:
-            // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
-            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+            // retrieving the user Id from user claims for type Id and converting its string value to integer, then assigning its value to the userId variable
+            var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == "Id").Value);
 
             if (User.IsInRole("User") && userId != id)
                 return View("_Error", "You don't have permission to delete other users!"); // _Error view can be found under Views/Shared folder.
@@ -183,11 +172,7 @@ namespace MVC.Controllers
                                                                                            // will be displayed.
 
             // Get item to delete service logic:
-            // Way 1:
-            //var item = _userService.Query().SingleOrDefault(q => q.Record.Id == id);
-            // Way 2: instead of invoking the Query method then getting the item by id with SingleOrDefault method,
-            // new GetItem method we implemented in the service interface can be invoked
-            var item = _userService.GetItem(id);
+            var item = _userService.Query().SingleOrDefault(q => q.Record.Id == id);
 
             return View(item);
         }
@@ -224,8 +209,11 @@ namespace MVC.Controllers
 
             if (ModelState.IsValid) // if model data including user name and password has no validation errors
             {
-                var result = _userService.Login(user.Record); // get the user with model data from the database
-                if (result.IsSuccessful) // if user exists in the database
+                // get the user with model data from the database
+                var existingUser = _userService.Query().SingleOrDefault(u => u.Record.UserName == user.Record.UserName && 
+                    u.Record.Password == user.Record.Password && u.Record.IsActive);
+
+                if (existingUser is not null) // if user exists in the database
                 {
                     // Creating the claim list that will be hashed in the authentication cookie which will be sent with each request to the web application.
                     // Only non-critical user data, which will be generally used in the web application such as user name to show in the views or user role
@@ -233,10 +221,10 @@ namespace MVC.Controllers
                     // Critical data such as password must never be put in the claim list!
                     List<Claim> claims = new List<Claim>()
                     {
-                        new Claim(ClaimTypes.Sid, _userService.LoggedInUser.Record.Id.ToString()), // LoggedInUser property contains the data within the database of the user
-                        new Claim(ClaimTypes.Name, _userService.LoggedInUser.UserName),
-                        new Claim(ClaimTypes.Role, _userService.LoggedInUser.Role)
-                        // Sid claim type key is used for storing the user Id value, Name claim type key is used for storing the user name value
+                        new Claim("Id", existingUser.Record.Id.ToString()), // existingUser contains the data within the database of the user
+                        new Claim(ClaimTypes.Name, existingUser.UserName),
+                        new Claim(ClaimTypes.Role, existingUser.Role)
+                        // Id claim type key is used for storing the user Id value, Name claim type key is used for storing the user name value
                         // and Role claim type key is used for storing the role name value within the items of the Claims collection
                     };
 
@@ -257,7 +245,7 @@ namespace MVC.Controllers
                     // redirecting user to the home page which has the controller action route /Home/Index
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", result.Message); // if user doesn't exist in the database, send the result's invalid message to the view's validation summary
+                ModelState.AddModelError("", "Invalid user name or password!"); // if user doesn't exist in the database, send the result's invalid message to the view's validation summary
             }
             return View(); // return the Login view with a null model for validation errors or unsuccessful login operation
         }
@@ -289,7 +277,10 @@ namespace MVC.Controllers
 
             if (ModelState.IsValid) // if model data including user name and password has no validation errors
             {
-                var result = _userService.Register(user.Record); // insert the registered user data to the database
+                // since Register method is not defined in IService and exists only in UserService, we can only invoke it
+                // by casting _userService field to the type UserService and assign it to userService variable
+                var userService = _userService as UserService;
+                var result = userService.Register(user.Record); // insert the registered user data to the database
                 if (result.IsSuccessful) // if insert operation is successful
                     return RedirectToAction(nameof(Login)); // redirect to the login action
                 ModelState.AddModelError("", result.Message); // add register operation result's message to the ModelState to show in the validation summary of the view

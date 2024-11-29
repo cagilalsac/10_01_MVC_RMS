@@ -1,10 +1,10 @@
 ﻿#nullable disable
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using BLL.Controllers.Bases;
-using BLL.Services;
+using BLL.DAL;
 using BLL.Models;
+using BLL.Services.Bases;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 // Generated from Custom Template.
 
@@ -14,24 +14,30 @@ namespace MVC.Controllers
     public class RolesController : MvcController // instead of inheriting from the Controller class, we inherit from the MvcController class to set the culture
     {
         // Service injections:
-        private readonly IRoleService _roleService; // for role service Constructor Injection
+        // Abstract Classes or Interfaces Way 1:
+        //private readonly IRoleService _roleService; // for role service Constructor Injection
+        // Abstract Classes or Interfaces Way 2:
+        private readonly IService<Role, RoleModel> _roleService; // for role service Constructor Injection
 
-        /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-        //private readonly IManyToManyRecordService _ManyToManyRecordService;
+        /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+        //private readonly I{Entity}Service _{Entity}Service;
 
         // Object of type RoleService which is implemented from the IRoleService interface is injected to this class through the constructor,
         // therefore role CRUD and other operations can be performed in the actions with _roleService field which references to the roleService injected instance.
         public RolesController(
-			IRoleService roleService
+            // Abstract Classes or Interfaces Way 1:
+            //IRoleService roleService
+            // Abstract Classes or Interfaces Way 2:
+            IService<Role, RoleModel> roleService
 
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-            //, IManyToManyRecordService ManyToManyRecordService
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+            //, I{Entity}Service {Entity}Service
         )
         {
             _roleService = roleService;
 
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-            //_ManyToManyRecordService = ManyToManyRecordService;
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+            //_{Entity}Service = {Entity}Service;
         }
 
         // GET: Roles
@@ -65,8 +71,8 @@ namespace MVC.Controllers
         {
             // Related items service logic to set ViewData (Record.Id and Name parameters may need to be changed in the SelectList constructor according to the model):
             
-            /* Can be uncommented and used for many to many relationships. ManyToManyRecord may be replaced with the related entiy name in the controller and views. */
-            //ViewBag.ManyToManyRecordIds = new MultiSelectList(_ManyToManyRecordService.Query().ToList(), "Record.Id", "Name");
+            /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
+            //ViewBag.{Entity}Ids = new MultiSelectList(_{Entity}Service.Query().ToList(), "Record.Id", "Name");
         }
 
         // GET: Roles/Create

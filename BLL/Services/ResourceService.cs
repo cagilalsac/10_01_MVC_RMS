@@ -5,15 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
-    public interface IResourceService
-    {
-        public IQueryable<ResourceModel> Query();
-        public Service Create(Resource resource);
-        public Service Update(Resource resource);
-        public Service Delete(int id);
-    }
-
-    public class ResourceService : Service, IResourceService
+    public class ResourceService : Service, IService<Resource, ResourceModel>
     {
         public ResourceService(Db db) : base(db)
         {

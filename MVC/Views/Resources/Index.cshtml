@@ -100,8 +100,8 @@
                                     for Admin role, show Edit and Delete links
                                     *@
 
-                                    // retrieving the user Id from user claims for type Sid and converting its string value to integer, then assigning its value to the userId variable
-                                    var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+                                    // retrieving the user Id from user claims for type Id and converting its string value to integer, then assigning its value to the userId variable
+                                    var userId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == "Id").Value);
 
                                     if (User.IsInRole("Admin") || (User.IsInRole("User") && item.UserIds.Contains(userId)))
                                     {

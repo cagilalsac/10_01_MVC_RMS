@@ -1,12 +1,19 @@
 #nullable disable
 
-using BLL.DAL;
+// Way 2:
+using BLL.DAL;  // Since Role entity class is under different folder therefore different namespace (DAL),
+                // we can include the namespace with "using" (similar to import in Java),
+                // therefore we can use the classes in the namespace directly.
 using System.ComponentModel;
 
 namespace BLL.Models
 {
     public class RoleModel // Model classes may also be called DTO (Data Transfer Object) classes such as RoleDTO
     {
+        // Way 1: Since we added the using directive for the Role entity's namespace at the top,
+        // we can use the Role entity class directly without writing the namespace
+        //public BLL.DAL.Role Record { get; set; }
+        // Way 2:
         public Role Record { get; set; } // RoleModel has a Record of type Role entity.
                                          // We name the property as "Record" since it is the entity for Role records in the database.
                                          // We will use this entity to set some entity properties to the model properties

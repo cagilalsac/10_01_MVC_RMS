@@ -1,11 +1,9 @@
-#nullable disable
-
-using BLL.DAL.Bases;
-
 namespace BLL.DAL
 {
-    public class UserResource : Record // many to many relational entity
+    public class UserResource // many to many relational entity
     {
+        public int Id { get; set; }
+
         // tables many to many relationship (Users table is the one side)
         public int UserId { get; set; }
 
