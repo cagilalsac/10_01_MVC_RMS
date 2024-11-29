@@ -20,7 +20,7 @@ namespace MVC.Controllers
         private readonly IService<Role, RoleModel> _roleService; // for role service Constructor Injection
 
         /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
-        //private readonly I{Entity}Service _{Entity}Service;
+        //private readonly IService<{Entity}, {Entity}Model> _{Entity}Service;
 
         // Object of type RoleService which is implemented from the IRoleService interface is injected to this class through the constructor,
         // therefore role CRUD and other operations can be performed in the actions with _roleService field which references to the roleService injected instance.
@@ -31,7 +31,7 @@ namespace MVC.Controllers
             IService<Role, RoleModel> roleService
 
             /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
-            //, I{Entity}Service {Entity}Service
+            //, IService<{Entity}, {Entity}Model> {Entity}Service
         )
         {
             _roleService = roleService;

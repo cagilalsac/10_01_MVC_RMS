@@ -26,14 +26,14 @@ namespace MVC.Controllers
         private readonly IService<Role, RoleModel> _roleService; // for the injection of role service for retrieving role data to be used in create and edit actions
 
         /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
-        //private readonly I{Entity}Service _{Entity}Service;
+        //private readonly IService<{Entity}, {Entity}Model> _{Entity}Service;
 
         public UsersController(
             IService<User, UserModel> userService
             , IService<Role, RoleModel> roleService
 
             /* Can be uncommented and used for many to many relationships. {Entity} may be replaced with the related entiy name in the controller and views. */
-            //, I{Entity}Service {Entity}Service
+            //, IService<{Entity}, {Entity}Model> {Entity}Service
         )
         {
             _userService = userService;
