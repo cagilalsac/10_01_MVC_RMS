@@ -1,3 +1,4 @@
+using BLL.Controllers.Bases;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using System.Diagnostics;
@@ -8,7 +9,10 @@ namespace MVC.Controllers
     // which are the starting point for executing the requests in actions, within the project.
     // Normally we give the file name "HomeController".
     // Related services and models used in the controller can be easily browsed from here by hitting the F12 key after clicking on them.
-    public class HomeController : Controller
+    // Way 1:
+    //public class HomeController : Controller
+    // Way 2:
+    public class HomeController : MvcController // for applying culture info configuration
     {
         // _logger instance Constructor Injection for logging operations if needed in actions:
         private readonly ILogger<HomeController> _logger;

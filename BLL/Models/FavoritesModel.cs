@@ -14,6 +14,6 @@ namespace BLL.Models
         public string Title { get; set; }
 
         [DisplayName("Resource Score")]
-        public decimal Score { get; set; } 
+        public string Score { get; set; } 
     }
 }

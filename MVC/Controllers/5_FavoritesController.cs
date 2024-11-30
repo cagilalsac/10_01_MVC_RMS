@@ -1,4 +1,5 @@
-﻿using BLL.DAL;
+﻿using BLL.Controllers.Bases;
+using BLL.DAL;
 using BLL.Models;
 using BLL.Services.Bases;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MVC.Controllers
 {
     [Authorize] // only authenticated users can perform favorites operations
-    public class FavoritesController : Controller
+    public class FavoritesController : MvcController
     {
         // For HttpService injection:
         private readonly HttpServiceBase _httpService;
@@ -77,8 +78,8 @@ namespace MVC.Controllers
                 {
                     ResourceId = resource.Record.Id,
                     UserId = userId,
-                    Title = resource.Record.Title,
-                    Score = resource.Record.Score
+                    Title = resource.Title,
+                    Score = resource.Score
                 };
                 favorites.Add(favorite);
                 _httpService.SetSession(SESSIONKEY, favorites);
