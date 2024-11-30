@@ -76,7 +76,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Session:
 builder.Services.AddSession(config => // we configure the session timeout value through the config Action delegate
 {
-    config.IdleTimeout = TimeSpan.FromSeconds(5); // default value is 20 minutes
+    config.IdleTimeout = TimeSpan.FromHours(1); // default value is 20 minutes
 });
 
 builder.Services.AddHttpContextAccessor(); // for the injection of object of type IHttpContextAccessor in our service classes
