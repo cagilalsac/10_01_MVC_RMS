@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace BLL.Controllers.Bases
 {
-    public abstract class MvcController : Controller // all controllers of our project will inherit from this abstract base class,
+    public abstract class MvcController : Controller // all controllers for CRUD will inherit from this abstract base class,
                                                      // this controller inherits from Controller class of the MVC library which is
                                                      // in the Microsoft.AspNetCore.Mvc.ViewFeatures NuGet Package,
                                                      // this controller's first purpose is managing the culture of the application

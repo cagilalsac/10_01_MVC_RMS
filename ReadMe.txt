@@ -211,3 +211,9 @@ or above specific actions. "Authorize" attribute checks whether the authenticati
 8.15) If you want to use "Sneat Dashboard Bootstrap 5" template, copy the "sneat" folder under the "wwwroot" folder of this MVC Project to your MVC Project's "wwwroot" folder 
 and copy the "_SneatLayout.cshtml" file under "Views/Shared" folder of this MVC Project to your MVC Project's "Views/Shared" folder, 
 then modify the title, links, icons, etc. in this layout view.
+
+8.16) HTTP related operations such as session or cookie operations can be implemented in an abstract base class 
+(in HttpService.cs file under BLL Project's Services -> Bases folder) and the concrete class inheriting from this
+abstract base class can be added to the application services in the IoC Container of the Program.cs file in the MVC Project.
+Therefore, HTTP related operations can be made in a controller after the constructor injection of the instance of type HttpServiceBase
+(in FavoritesController under MVC Project's Controllers folder).

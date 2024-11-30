@@ -1,0 +1,45 @@
+﻿@model IEnumerable<FavoritesModel>
+
+@{
+    ViewBag.Title = "Favorites";
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+@if (TempData["Message"] is not null)
+{
+    <p class="text-danger">@TempData["Message"]</p>
+}
+
+@if (Model is not null && Model.Count() > 0)
+{
+    <a asp-action="Clear">Clear All Favorites</a>
+    <br /><br />
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Score)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (FavoritesModel item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.Score
+                </td>
+                <td>
+                    <a asp-action="Remove" asp-route-resourceId="@item.ResourceId">Remove Favorite</a>
+                    @* in asp-route-resourceId, resourceId is the Remove action's parameter name *@
+                </td>
+            </tr>
+        }
+    </table>
+}

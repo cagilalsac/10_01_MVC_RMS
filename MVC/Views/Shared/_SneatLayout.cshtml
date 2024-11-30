@@ -111,6 +111,15 @@
 
                             </ul>
                         </li>
+
+                        @* For favorites management in session: *@
+                        @* show "Favorites" link for application users with roles "Admin" or "User" *@
+                        <li class="menu-item">
+                            <a asp-area="" asp-action="Get" asp-controller="Favorites" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-cart"></i>
+                                <div class="text-truncate" data-i18n="Favorites">Favorites</div>
+                            </a>
+                        </li>
                     }
 
                     @* show "Resources" link to everyone *@

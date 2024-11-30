@@ -48,6 +48,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
                             </li>
+
+                            // For favorites management in session:
+                            // show "Favorites" link for application users with roles "Admin" or "User"
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Favorites" asp-action="Get">Favorites</a>
+                            </li>
                         }
 
                         @* show "Resources" link to everyone *@

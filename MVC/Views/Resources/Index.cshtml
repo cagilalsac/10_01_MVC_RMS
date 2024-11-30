@@ -92,6 +92,9 @@
 
                                 @if (User.Identity.IsAuthenticated) // show Details link to the authenticated application users
                                 {
+                                    @* For favorites management in session: *@
+						            <a asp-action="Add" asp-controller="Favorites" asp-route-resourceId="@item.Record.Id">Add Favorite</a>@:&nbsp;|&nbsp;
+
 						            <a asp-action="Details" asp-route-id="@item.Record.Id">Details</a>
 
                                     @* 

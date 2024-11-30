@@ -59,7 +59,7 @@ builder.Services.AddScoped<IService<Resource, ResourceModel>, ResourceService>()
 
 // Authentication:
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme) // we are adding authentication to the project using default Cookie authentication
-    .AddCookie(config => // we configure the cookie to be created through the config Action delegate
+    .AddCookie(config => // we configure the authentication cookie to be created through the config Action delegate
     {
         config.LoginPath = "/Users/Login"; // if an operation is attempted without logging into the system, redirect the user to the Users controller's Login action
         config.AccessDeniedPath = "/Users/Login"; // if an unauthorized operation is attempted after logging into the system, redirect the user to the Users controller's Login action
@@ -69,6 +69,20 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                                          // if set to false, the user's cookie lifespan ends after the duration specified above after the initial login, then user needs to log in again
     });
 // If authentication is added here, it must be used below after building the application.
+
+
+
+// HTTP Service injection for HTTP related operations such as session or cookie operations:
+// Session:
+builder.Services.AddSession(config => // we configure the session timeout value through the config Action delegate
+{
+    config.IdleTimeout = TimeSpan.FromSeconds(5); // default value is 20 minutes
+});
+
+builder.Services.AddHttpContextAccessor(); // for the injection of object of type IHttpContextAccessor in our service classes
+builder.Services.AddSingleton<HttpServiceBase, HttpService>(); // we only need one instance of HttpService object
+                                                               // through the application's life-time therefore
+                                                               // we use the AddSingleton method
 
 
 
@@ -95,6 +109,13 @@ app.UseAuthentication(); // must be written to activate authentication configure
 
 
 app.UseAuthorization(); // for enabling users perform specific operations in the system according to their priviliges, authorization is asking "what can you do?"
+
+
+
+// Session:
+app.UseSession();
+
+
 
 app.MapControllerRoute( // mapping the default route of the application which is controller/action/id, id is optional therefore marked with "?"
     name: "default",
