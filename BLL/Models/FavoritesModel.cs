@@ -11,9 +11,9 @@ namespace BLL.Models
         public int UserId { get; set; }
 
         [DisplayName("Resource Title")]
-        public string Title { get; set; }
+        public string ResourceTitle { get; set; }
 
         [DisplayName("Resource Score")]
-        public string Score { get; set; } 
+        public string ResourceScore { get; set; } 
     }
 }

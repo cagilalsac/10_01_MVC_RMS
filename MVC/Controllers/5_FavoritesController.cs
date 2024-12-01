@@ -32,7 +32,7 @@ namespace MVC.Controllers
             // initialize an empty list and assign it to the favorites variable.
             // Otherwise assign session data to the favorites variable.
             List<FavoritesModel> favorites = _httpService.GetSession<List<FavoritesModel>>(SESSIONKEY) ?? new List<FavoritesModel>();
-            return favorites.OrderBy(f => f.Title).Where(f => f.UserId == userId).ToList();
+            return favorites.OrderBy(f => f.ResourceTitle).Where(f => f.UserId == userId).ToList();
         }
 
         // from authentication cookie
@@ -72,18 +72,18 @@ namespace MVC.Controllers
             {
                 TempData["Message"] = "Resource not found!";
             }
-            else if (!favorites.Any(f => f.ResourceId == resourceId && f.UserId == userId)) // if no favorite with the same resource id and user id exists
+            else if (!favorites.Any(f => f.ResourceId == resourceId)) // if no favorite with the same resource id exists
             {
                 FavoritesModel favorite = new FavoritesModel() // initializing the favorite to add to favorites list
                 {
                     ResourceId = resource.Record.Id,
                     UserId = userId,
-                    Title = resource.Title,
-                    Score = resource.Score
+                    ResourceTitle = resource.Title,
+                    ResourceScore = resource.Score
                 };
                 favorites.Add(favorite);
                 _httpService.SetSession(SESSIONKEY, favorites);
-                TempData["Message"] = $"\"{favorite.Title}\" successfully added to favorites.";
+                TempData["Message"] = $"\"{favorite.ResourceTitle}\" successfully added to favorites.";
             }
             return RedirectToAction("Index", "Resources"); // redirecting application user to the Index action
                                                            // of the Resources controller therefore application user
